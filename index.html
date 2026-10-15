@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TomaTech | Classificação de Tomates</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <span class="brand-name">TomaTech</span>
+    </div>
+
+    <section>
+      <h3>Microcontrolador ESP32</h3>
+      <label for="port">Porta COM</label>
+      <select id="port"></select>
+      <label for="baud">Baud rate</label>
+      <select id="baud">
+        <option>115200</option>
+        <option>9600</option>
+      </select>
+      <div class="row">
+        <button id="btn-connect" class="btn">Conectar</button>
+        <button id="btn-disconnect" class="btn ghost" hidden>Desconectar</button>
+      </div>
+      <p id="esp-status" class="note">Modo simulação (sem ESP32)</p>
+    </section>
+
+    <section>
+      <h3>Fonte da imagem</h3>
+      <label class="radio"><input type="radio" name="source" value="synthetic" checked> Amostra sintética</label>
+      <label class="radio"><input type="radio" name="source" value="upload"> Enviar imagem</label>
+      <label class="radio"><input type="radio" name="source" value="camera"> Câmera ao vivo</label>
+      <label class="radio"><input type="radio" name="source" value="dataset"> Pasta do dataset</label>
+    </section>
+
+    <section>
+      <h3>Parâmetros</h3>
+      <label for="min-score">Nota mínima para a Cesta A <b id="min-score-val" class="pill">80</b></label>
+      <input type="range" id="min-score" min="50" max="95" value="80">
+    </section>
+  </aside>
+
+  <main>
+    <header class="title-box">
+      <h1>Triagem de tomates</h1>
+      <p>Mande uma foto e veja em segundos se o tomate vai para a Cesta A ou para a Cesta B.</p>
+    </header>
+
+    <nav class="tabs" id="main-tabs">
+      <button class="tab active" data-view="view-analyze">Classificação</button>
+      <button class="tab" data-view="view-compare">Comparar tomates</button>
+    </nav>
+
+    <!-- ===================== CLASSIFICAÇÃO ===================== -->
+    <div id="view-analyze" class="view active">
+      <div class="panel" id="source-panel">
+        <div id="src-synthetic" class="src">
+          <label for="synthetic-type">Perfil de tomate para testar</label>
+          <select id="synthetic-type">
+            <option value="perfect">Tomate vermelho premium (Bom)</option>
+            <option value="green">Tomate verde imaturo (Ruim)</option>
+            <option value="diseased">Tomate com manchas pretas (Ruim)</option>
+            <option value="cracked">Tomate rachado/danificado (Ruim)</option>
+            <option value="undersized">Tomate pequeno (Ruim)</option>
+          </select>
+        </div>
+        <div id="src-upload" class="src" hidden>
+          <label for="upload-file">Enviar imagem de tomate (jpg, png)</label>
+          <input type="file" id="upload-file" accept="image/*">
+        </div>
+        <div id="src-camera" class="src" hidden>
+          <video id="cam" autoplay playsinline muted></video>
+          <button id="btn-capture" class="btn">Capturar e analisar</button>
+          <p id="cam-msg" class="note"></p>
+        </div>
+        <div id="src-dataset" class="src" hidden>
+          <label for="dataset-file">Imagem do dataset <span id="dataset-count"></span></label>
+          <select id="dataset-file"></select>
+          <p id="dataset-msg" class="note"></p>
+        </div>
+      </div>
+
+      <p id="analyze-msg" class="note msg"></p>
+
+      <div id="results" hidden>
+        <div class="grid-2">
+          <div>
+            <div id="decision-box" class="result">
+              <div class="result-header">Saída da triagem</div>
+              <div id="decision-text" class="result-decision"></div>
+              <div class="score-line"><span id="score" class="score"></span><span class="score-max">/ 100</span></div>
+              <div id="decision-hint" class="hint"></div>
+            </div>
+            <p class="serial"><b>Retorno do ESP32</b><code id="serial-log"></code></p>
+            <h3>Imagem capturada</h3>
+            <img id="img-original" class="shot" alt="Imagem original">
+          </div>
+
+          <div>
+            <h3>O que o sistema enxergou</h3>
+            <nav class="tabs small" id="feature-tabs">
+              <button class="tab active" data-pane="pane-tomato">Tomate isolado</button>
+              <button class="tab" data-pane="pane-color">Cor</button>
+              <button class="tab" data-pane="pane-size">Tamanho</button>
+              <button class="tab" data-pane="pane-texture">Textura</button>
+              <button class="tab" data-pane="pane-defects">Defeitos</button>
+            </nav>
+            <div id="pane-tomato" class="pane active">
+              <img id="img-tomato" class="shot" alt="Tomate isolado">
+              <p class="note">Fundo removido: só os pixels do tomate entram nos cálculos.</p>
+            </div>
+            <div id="pane-color" class="pane">
+              <img id="img-color" class="shot" alt="Cor">
+              <div class="metrics3" id="m-color"></div>
+            </div>
+            <div id="pane-size" class="pane">
+              <img id="img-contours" class="shot" alt="Contorno">
+              <div class="metrics3" id="m-size"></div>
+            </div>
+            <div id="pane-texture" class="pane">
+              <img id="img-texture" class="shot" alt="Textura">
+              <div class="metrics3" id="m-texture"></div>
+            </div>
+            <div id="pane-defects" class="pane">
+              <img id="img-defects" class="shot" alt="Defeitos">
+              <div class="metrics3" id="m-defects"></div>
+            </div>
+          </div>
+        </div>
+
+        <h3>Detalhamento da qualidade</h3>
+        <div class="cards" id="cards"></div>
+      </div>
+
+      <div id="landing" class="panel">
+        <h3>Como o tomate chega até a cesta</h3>
+        <ol class="flow">
+          <li><b>Câmera</b><span>captura a foto</span></li>
+          <li><b>Segmentação</b><span>remove o fundo</span></li>
+          <li><b>OpenCV</b><span>mede cor, textura e tamanho</span></li>
+          <li><b>Painel</b><span>calcula a nota</span></li>
+          <li><b>ESP32</b><span>aciona o servo</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- ===================== COMPARAÇÃO ===================== -->
+    <div id="view-compare" class="view">
+      <div class="panel">
+        <p class="note">Compara dois tomates considerando <b>somente a região do tomate</b>: o fundo é removido antes de comparar cor, textura, formato, tamanho e defeitos.</p>
+        <div class="grid-2">
+          <div class="slot" data-slot="a">
+            <h3>Tomate A</h3>
+            <input type="file" accept="image/*" class="slot-file">
+            <select class="slot-dataset"><option value="">— ou escolha do dataset —</option></select>
+            <img class="shot slot-preview" alt="Prévia A" hidden>
+          </div>
+          <div class="slot" data-slot="b">
+            <h3>Tomate B</h3>
+            <input type="file" accept="image/*" class="slot-file">
+            <select class="slot-dataset"><option value="">— ou escolha do dataset —</option></select>
+            <img class="shot slot-preview" alt="Prévia B" hidden>
+          </div>
+        </div>
+        <button id="btn-compare" class="btn big">Comparar tomates</button>
+        <p id="compare-msg" class="note msg"></p>
+      </div>
+
+      <div id="compare-results" hidden>
+        <div class="grid-2">
+          <div><h3>Tomate A (isolado)</h3><img id="cut-a" class="shot checker" alt="A isolado"></div>
+          <div><h3>Tomate B (isolado)</h3><img id="cut-b" class="shot checker" alt="B isolado"></div>
+        </div>
+        <div class="result" id="compare-box">
+          <div class="result-header">Similaridade geral</div>
+          <div class="score" id="sim-overall"></div>
+          <div class="result-decision" id="sim-verdict"></div>
+        </div>
+        <div class="bars" id="sim-bars"></div>
+        <p class="note" id="sim-details"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="/script.js"></script>
+</body>
+</html>
