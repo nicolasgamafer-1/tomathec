@@ -14,7 +14,10 @@
     </div>
 
     <section>
-      <h3>Microcontrolador ESP32</h3>
+      <h3>
+        <svg class="icon-sidebar" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        Microcontrolador ESP32
+      </h3>
       <label for="port">Porta COM</label>
       <select id="port"></select>
       <label for="baud">Baud rate</label>
@@ -30,7 +33,10 @@
     </section>
 
     <section>
-      <h3>Fonte da imagem</h3>
+      <h3>
+        <svg class="icon-sidebar" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        Fonte da imagem
+      </h3>
       <label class="radio"><input type="radio" name="source" value="synthetic" checked> Amostra sintética</label>
       <label class="radio"><input type="radio" name="source" value="upload"> Enviar imagem</label>
       <label class="radio"><input type="radio" name="source" value="camera"> Câmera ao vivo</label>
@@ -38,7 +44,10 @@
     </section>
 
     <section>
-      <h3>Parâmetros</h3>
+      <h3>
+        <svg class="icon-sidebar" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        Parâmetros
+      </h3>
       <label for="min-score">Nota mínima para a Cesta A <b id="min-score-val" class="pill">80</b></label>
       <input type="range" id="min-score" min="50" max="95" value="80">
     </section>
@@ -51,8 +60,14 @@
     </header>
 
     <nav class="tabs" id="main-tabs">
-      <button class="tab active" data-view="view-analyze">Classificação</button>
-      <button class="tab" data-view="view-compare">Comparar tomates</button>
+      <button class="tab active" data-view="view-analyze">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Classificação
+      </button>
+      <button class="tab" data-view="view-compare">
+        <svg viewBox="0 0 24 24"><path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v-2H5V5h5V3zm9 0h-5v2h5v14h-5v2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+        Comparar tomates
+      </button>
     </nav>
 
     <!-- ===================== CLASSIFICAÇÃO ===================== -->
@@ -96,12 +111,18 @@
               <div id="decision-hint" class="hint"></div>
             </div>
             <p class="serial"><b>Retorno do ESP32</b><code id="serial-log"></code></p>
-            <h3>Imagem capturada</h3>
+            <h3>
+              <svg class="icon-heading" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+              Imagem capturada
+            </h3>
             <img id="img-original" class="shot" alt="Imagem original">
           </div>
 
           <div>
-            <h3>O que o sistema enxergou</h3>
+            <h3>
+              <svg class="icon-heading" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              O que o sistema enxergou
+            </h3>
             <nav class="tabs small" id="feature-tabs">
               <button class="tab active" data-pane="pane-tomato">Tomate isolado</button>
               <button class="tab" data-pane="pane-color">Cor</button>
@@ -132,18 +153,36 @@
           </div>
         </div>
 
-        <h3>Detalhamento da qualidade</h3>
+        <h3>
+          <svg class="icon-heading" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          Detalhamento da qualidade
+        </h3>
         <div class="cards" id="cards"></div>
       </div>
 
       <div id="landing" class="panel">
         <h3>Como o tomate chega até a cesta</h3>
         <ol class="flow">
-          <li><b>Câmera</b><span>captura a foto</span></li>
-          <li><b>Segmentação</b><span>remove o fundo</span></li>
-          <li><b>OpenCV</b><span>mede cor, textura e tamanho</span></li>
-          <li><b>Painel</b><span>calcula a nota</span></li>
-          <li><b>ESP32</b><span>aciona o servo</span></li>
+          <li>
+            <svg class="flow-icon" viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-2.17 1.28 2.82-4.77 2.17zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            <b>Câmera</b><span>captura a foto</span>
+          </li>
+          <li>
+            <svg class="flow-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+            <b>Segmentação</b><span>remove o fundo</span>
+          </li>
+          <li>
+            <svg class="flow-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <b>OpenCV</b><span>mede cor, textura e tamanho</span>
+          </li>
+          <li>
+            <svg class="flow-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            <b>Painel</b><span>calcula a nota</span>
+          </li>
+          <li>
+            <svg class="flow-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>
+            <b>ESP32</b><span>aciona o servo</span>
+          </li>
         </ol>
       </div>
     </div>

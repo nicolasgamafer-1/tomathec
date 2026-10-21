@@ -223,9 +223,12 @@
     box.className = 'result ' + (good ? 'good' : 'bad');
     $('#decision-text').textContent = good ? '🟢 CESTA A (BOM)' : '🔴 CESTA B (RUIM)';
     $('#score').textContent = r.total_score;
-    $('#decision-hint').textContent = good
+    const why = (r.reasons || []).join('; ');
+    const warn = (r.warnings || []).join('; ');
+    $('#decision-hint').textContent = (good
       ? 'O tomate atende aos critérios de qualidade. Pronto para embalar.'
-      : 'O tomate não atende aos parâmetros. Acionando o rejeitador.';
+      : 'Reprovado' + (why ? ': ' + why : '') + '. Acionando o rejeitador.')
+      + (warn ? ' Atenção: ' + warn + '.' : '');
     $('#serial-log').textContent = r.serial_log;
 
     const m = r.metrics;
